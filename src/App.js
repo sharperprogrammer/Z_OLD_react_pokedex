@@ -29,7 +29,6 @@ class App extends Component {
   derp = (poke_results) => {
     let newList = [];
     poke_results.results.forEach(item => newList.push(this.setProperties(item)));
-    console.log(newList);
     this.setState({all_pokemon: newList});
 
     this.state.all_pokemon.forEach((item, i) => this.setSprite(item, i))
@@ -52,11 +51,21 @@ class App extends Component {
   setSprite = (item, i) => {
     fetch(item.url)
     .then(response => response.json())
-    // .then(response => item.sprite = response.sprites.front_default)
-    .then(response => this.setState({
+    .then(response => this.updateStateAttributes(response, i) )
+  }
+
+  updateStateAttributes = (response, i) => {
+    this.setState({
       all_pokemon: update(this.state.all_pokemon, 
-        {[i]: {sprite: {$set: response.sprites.front_default } } } )
-    } ) )
+        {[i]: {sprite: {$set: response.sprites.front_default } },
+         [i]: {type1: {$set: response.types[0].type.name} } } )
+    } )
+    if (response.types[1]) {
+      this.setState({
+        all_pokemon: update(this.state.all_pokemon, 
+          {[i]: {type2: {$set: response.types[1].type.name} } } )
+      } )
+    }
   }
 
   handleChange = e => {

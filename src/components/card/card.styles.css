@@ -22,3 +22,9 @@
 h2 {
     margin-bottom: 0;
 }
+.name {
+    margin-bottom: 10px;
+}
+.type {
+    margin: 0;
+}
