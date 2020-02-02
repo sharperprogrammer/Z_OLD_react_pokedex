@@ -28,3 +28,6 @@ h2 {
 .type {
     margin: 0;
 }
+.image {
+    max-width: 300px;
+}
