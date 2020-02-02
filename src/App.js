@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './App.css';
 import { CardList } from './components/card-list/card-list.component';
 import { SearchBox } from './components/search-box/search-box.component';
+// import update from 'react-addons-update';
+import update from 'immutability-helper';
 
 
 class App extends Component {
@@ -25,26 +27,36 @@ class App extends Component {
   }
 
   derp = (poke_results) => {
-    this.setState({all_pokemon: poke_results.results});
-    this.state.all_pokemon.forEach(monster => console.log(monster));
-    // this.state.all_pokemon.forEach(item => this.setProperties(item))
+    let newList = [];
+    poke_results.results.forEach(item => newList.push(this.setProperties(item)));
+    console.log(newList);
+    this.setState({all_pokemon: newList});
+
+    this.state.all_pokemon.forEach((item, i) => this.setSprite(item, i))
   }
 
   setProperties = (item) => {
-    this.setId(item);
-    this.setSprite(item);
+    return {
+      name: item.name, 
+      url: item.url,
+      id: this.setId(item),
+      sprite: ''
+    }
   }
 
   setId = item => {
     let id = item.url.substring(34, item.url.lastIndexOf("/"))
-    // console.log(id);
-    item.id = id;
+    return id;
   }
 
-  setSprite = item => {
+  setSprite = (item, i) => {
     fetch(item.url)
     .then(response => response.json())
-    .then(response => item.sprite = response.sprites.front_default)
+    // .then(response => item.sprite = response.sprites.front_default)
+    .then(response => this.setState({
+      all_pokemon: update(this.state.all_pokemon, 
+        {[i]: {sprite: {$set: response.sprites.front_default } } } )
+    } ) )
   }
 
   handleChange = e => {
@@ -52,10 +64,6 @@ class App extends Component {
   }
 
   render() {
-
-    // this.state.all_pokemon.forEach(item => console.log(item));
-
-    this.state.all_pokemon.forEach(item => this.setProperties(item))
 
     const { all_pokemon, searchField } = this.state;
     const filtered_pokemon = all_pokemon.filter(monster => 
