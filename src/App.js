@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import { CardList } from './components/card-list/card-list.component';
-// import { SearchBox } from './components/search-box/search-box.component';
+import { SearchBox } from './components/search-box/search-box.component';
 
 
 class App extends Component {
@@ -12,7 +12,8 @@ class App extends Component {
     this.state = {
       all_pokemon: [
 
-      ]
+      ],
+      searchField: ''
     };
   }
 
@@ -25,6 +26,7 @@ class App extends Component {
 
   derp = (poke_results) => {
     this.setState({all_pokemon: poke_results.results});
+    this.state.all_pokemon.forEach(monster => console.log(monster));
     // this.state.all_pokemon.forEach(item => this.setProperties(item))
   }
 
@@ -45,16 +47,27 @@ class App extends Component {
     .then(response => item.sprite = response.sprites.front_default)
   }
 
+  handleChange = e => {
+    this.setState({searchField: e.target.value});
+  }
+
   render() {
 
     // this.state.all_pokemon.forEach(item => console.log(item));
 
     this.state.all_pokemon.forEach(item => this.setProperties(item))
 
+    const { all_pokemon, searchField } = this.state;
+    const filtered_pokemon = all_pokemon.filter(monster => 
+      monster.name.toLowerCase().includes(searchField.toLowerCase())
+    );
+
     return (
       <div className="App">
         <h1>Pokedex</h1>
-        <CardList monsters={this.state.all_pokemon} />
+        <SearchBox placeholder="search monsters" 
+        handleChange={this.handleChange} />
+        <CardList monsters={filtered_pokemon} />
       </div>
     );
   }
