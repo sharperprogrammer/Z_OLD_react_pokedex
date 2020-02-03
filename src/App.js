@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './App.css';
 import CardList from './components/card-list/card-list.component';
 import { SearchBox } from './components/search-box/search-box.component';
-// import update from 'react-addons-update';
 import update from 'immutability-helper';
 
 
@@ -19,39 +18,8 @@ class App extends Component {
     };
   }
 
-  componentDidMount() {
-    fetch('https://pokeapi.co/api/v2/pokemon?limit=151')
-    .then(response => response.json())
-    .then(pokemon => this.derp(pokemon));
-    
-  }
-
-  derp = (poke_results) => {
-    let newList = [];
-    poke_results.results.forEach(item => newList.push(this.setProperties(item)));
-    this.setState({all_pokemon: newList});
-
-    this.state.all_pokemon.forEach((item, i) => this.setSprite(item, i))
-  }
-
-  setProperties = (item) => {
-    return {
-      name: item.name, 
-      url: item.url,
-      id: this.setId(item),
-      sprite: ''
-    }
-  }
-
-  setId = item => {
-    let id = item.url.substring(34, item.url.lastIndexOf("/"))
-    return id;
-  }
-
-  setSprite = (item, i) => {
-    fetch(item.url)
-    .then(response => response.json())
-    .then(response => this.updateStateAttributes(response, i) )
+  setAllPokemon = allPokes => {
+    this.setState({all_pokemon: allPokes});
   }
 
   updateStateAttributes = (response, i) => {
@@ -84,7 +52,12 @@ class App extends Component {
         <h1>Pokedex</h1>
         <SearchBox placeholder="search monsters" 
         handleChange={this.handleChange} />
-        <CardList monsters={filtered_pokemon} />
+        <CardList 
+        all_pokemon={this.state.all_pokemon} 
+        monsters={filtered_pokemon} 
+        setAllPokemon = {this.setAllPokemon}
+        updateStateAttributes = {this.updateStateAttributes}
+        />
       </div>
     );
   }
