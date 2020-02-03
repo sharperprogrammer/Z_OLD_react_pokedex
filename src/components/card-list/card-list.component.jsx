@@ -41,8 +41,9 @@ class CardList extends Component {
       }
 
     render() {
+      
         return <div className="card-list">
-            {this.props.monsters.map(monster => (
+            {this.props.monsters && this.props.monsters.map(monster => (
                 <Card key={monster.id} monster={monster} />
             ))}
         </div>

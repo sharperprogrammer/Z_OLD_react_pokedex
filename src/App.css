@@ -2,3 +2,13 @@
   text-align: center;
 }
 
+.myDiv {
+  justify-content: center;
+}
+.myDropdown {
+  /* margin-top: 7px;
+  margin-left: 10px;
+  width: 200px; */
+  margin: 0 auto 20px auto;
+  width: 200px;
+}
