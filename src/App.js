@@ -3,7 +3,7 @@ import './App.css';
 import CardList from './components/card-list/card-list.component';
 import { SearchBox } from './components/search-box/search-box.component';
 import update from 'immutability-helper';
-import DropDown from './components/drop-down/drop-down.component';
+// import DropDown from './components/drop-down/drop-down.component';
 import Select from 'react-select'
 
 

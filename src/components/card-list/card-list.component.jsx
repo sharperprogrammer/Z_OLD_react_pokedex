@@ -1,16 +1,22 @@
 import React, {Component} from 'react'
 import './card-list.styles.css'
-import { Card } from '../card/card.component';
+import Card from '../card/card.component';
 
 
 class CardList extends Component {
 
+    importAll = (r) => {
+      let images = {};
+      r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
+      return images;
+    }
+
+
     componentDidMount() {
-        fetch('https://pokeapi.co/api/v2/pokemon?limit=151')
-        .then(response => response.json())
-        .then(pokemon => this.setProperties(pokemon));
-        
-      }
+      fetch('https://pokeapi.co/api/v2/pokemon?limit=807')
+      .then(response => response.json())
+      .then(pokemon => this.setProperties(pokemon));
+    }
     
       setProperties = (poke_results) => {
         let newList = [];
@@ -41,12 +47,16 @@ class CardList extends Component {
       }
 
     render() {
+
+      const images = this.importAll(require.context('../../images', false, /\.(png|jpe?g|svg)$/));
       
-        return <div className="card-list">
-            {this.props.monsters && this.props.monsters.map(monster => (
-                <Card key={monster.id} monster={monster} />
-            ))}
-        </div>
+      
+
+      return <div className="card-list">
+          {this.props.monsters && this.props.monsters.map(monster => (
+              <Card key={monster.id} monster={monster} image={images[`${monster.name}.jpg`]} />
+          ) ) }
+      </div>
     };
 }
 
