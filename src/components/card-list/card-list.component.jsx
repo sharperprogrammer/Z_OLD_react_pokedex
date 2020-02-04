@@ -5,6 +5,8 @@ import Card from '../card/card.component';
 
 class CardList extends Component {
 
+    // import an entire folder of images into an array
+    // https://stackoverflow.com/questions/42118296/dynamically-import-images-from-a-directory-using-webpack
     importAll = (r) => {
       let images = {};
       r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
@@ -13,7 +15,7 @@ class CardList extends Component {
 
 
     componentDidMount() {
-      fetch('https://pokeapi.co/api/v2/pokemon?limit=807')
+      fetch('https://pokeapi.co/api/v2/pokemon?limit=151')
       .then(response => response.json())
       .then(pokemon => this.setProperties(pokemon));
     }
